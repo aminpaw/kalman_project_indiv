@@ -1,0 +1,8 @@
+prefix=/home/amin/kalman_project/devel
+
+Name: navplan
+Description: Description of navplan
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

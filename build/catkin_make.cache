@@ -1,0 +1,2 @@
+navplan
+-DCATKIN_DEVEL_PREFIX=/home/amin/kalman_project/devel -DCMAKE_INSTALL_PREFIX=/home/amin/kalman_project/install -G Unix Makefiles
