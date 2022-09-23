@@ -90,7 +90,9 @@ class Controller:
         L_d = math.dist(current_xy,next_waypoint)
         direction = next_waypoint - current_xy
         unit_dir = direction / np.linalg.norm(direction)
-        heading = np.arccos(np.clip(np.dot(unit_dir, [0,0]), -1.0, 1.0))
+        heading = np.arccos(np.clip(np.dot(unit_dir, [1,0]), -1.0, 1.0))
+        if direction[1] < 0 :
+            heading = -heading
         alpha = heading - current_yaw
 
         steer_angle = np.arctan((2*self.L*np.sin(alpha))/L_d)
@@ -139,7 +141,7 @@ while not rospy.is_shutdown():
     
     
     # Longitudinal and lateral control
-    longitudinal_cont = controller.get_longitudinal_control(current_state[3],3,0.1)
+    longitudinal_cont = controller.get_longitudinal_control(current_state[3],4,0.1)
     lateral_cont = controller.get_lateral_pure_pursuit(current_state[[0,1]],current_state[2],curr_waypoint[[0,1]])
 
     # Create longitudinal and lateral messages (of type Float64 imported above)
