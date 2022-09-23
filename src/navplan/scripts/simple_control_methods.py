@@ -139,7 +139,7 @@ while not rospy.is_shutdown():
     
     
     # Longitudinal and lateral control
-    longitudinal_cont = controller.get_longitudinal_control(current_state[3],1,0.1)
+    longitudinal_cont = controller.get_longitudinal_control(current_state[3],3,0.1)
     lateral_cont = controller.get_lateral_pure_pursuit(current_state[[0,1]],current_state[2],curr_waypoint[[0,1]])
 
     # Create longitudinal and lateral messages (of type Float64 imported above)
