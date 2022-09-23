@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from tkinter.messagebox import RETRY
+from turtle import position
 import numpy as np
 import math
 import rospy
@@ -120,6 +122,14 @@ class Controller:
         steer_angle: float
             Steering angle in rad
         '''
+        k = 0.175
+        front_position = (current_xy[0] + 0.5*self.L*np.cos(current_yaw)), (current_xy[1] + 0.5*self.L*np.sin(current_yaw))
+        error = np.linalg.norm(front_position - next_waypoint[[0,1]])
+        cross_track_correction = np.arctan((k*error)/(0.00000000001+current_speed))
+        head_error_correction = next_waypoint[2] - current_yaw
+
+        steering_angle = sorted((-np.pi/2,head_error_correction + cross_track_correction,np.pi/2))[1]
+        return steering_angle
         pass
        
 controller = Controller()
@@ -142,8 +152,8 @@ while not rospy.is_shutdown():
     
     # Longitudinal and lateral control
     longitudinal_cont = controller.get_longitudinal_control(current_state[3],4,0.1)
-    lateral_cont = controller.get_lateral_pure_pursuit(current_state[[0,1]],current_state[2],curr_waypoint[[0,1]])
-
+    #lateral_cont = controller.get_lateral_pure_pursuit(current_state[[0,1]],current_state[2],curr_waypoint[[0,1]])
+    lateral_cont = controller.get_lateral_stanley(current_state[[0,1]],current_state[2],current_state[3],curr_waypoint)
     # Create longitudinal and lateral messages (of type Float64 imported above)
     throttle = Float64(longitudinal_cont)
     steer = Float64()
